@@ -23,12 +23,16 @@ if(defined('rsssl_plugin')) {
 		public function init() {
 			//add_filter('template_directory_uri', array($this,'fix_template_directory_uri'), 10, 3);
 			add_filter('theme_root_uri', array($this, 'fix_theme_root_uri'), 10, 3);
+			add_filter('includes_url', array($this, 'fix_uri'), 10, 1);
+		}
+		public function fix_uri($uri) {
+			return preg_replace('/^https?\:/i', '//', $uri); // replace "http://" or "https://" by "//"
 		}
 		public function fix_template_directory_uri($template_dir_uri, $template, $theme_root_uri) {
-			return preg_replace('/^https?\:/i', '//', $template_dir_uri); // replace "http://" or "https://" by "//"
+			return $this->fix_uri($template_dir_uri);
 		}
 		public function fix_theme_root_uri($theme_root_uri, $siteurl, $stylesheet_or_template) {
-			return preg_replace('/^https?\:/i', '//', $theme_root_uri); // replace "http://" or "https://" by "//"
+			return $this->fix_uri($theme_root_uri);
 		}
 	}
 }
