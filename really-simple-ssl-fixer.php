@@ -24,6 +24,7 @@ if(defined('rsssl_plugin')) {
 			//add_filter('template_directory_uri', array($this,'fix_template_directory_uri'), 10, 3);
 			add_filter('theme_root_uri', array($this, 'fix_theme_root_uri'), 10, 3);
 			add_filter('includes_url', array($this, 'fix_uri'), 10, 1);
+			add_filter('wp_calculate_image_srcset', array($this, 'wp_calculate_image_srcset'), 10, 1);
 		}
 		public function fix_uri($uri) {
 			return preg_replace('/^https?\:/i', '//', $uri); // replace "http://" or "https://" by "//"
@@ -33,6 +34,10 @@ if(defined('rsssl_plugin')) {
 		}
 		public function fix_theme_root_uri($theme_root_uri, $siteurl, $stylesheet_or_template) {
 			return $this->fix_uri($theme_root_uri);
+		}
+		public function wp_calculate_image_srcset($sources) {
+			$sources['url'] = $this->fix_uri($sources['url']);
+			return $sources;
 		}
 	}
 }
