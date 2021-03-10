@@ -51,7 +51,7 @@ class RSSSLF {
 	}
 	public function login_redirect($url) {
 		if( isset($_SERVER['HTTPS']) && 'on' == $_SERVER['HTTPS'] ) { //force ssl when enabled
-			$sredirect = str_replace("http://", "https://", $url);
+			$url = str_replace("http://", "https://", $url);
 		}
 		return $url;
 	}
