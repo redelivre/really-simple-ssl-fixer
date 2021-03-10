@@ -25,6 +25,7 @@ if(defined('rsssl_plugin')) {
 			add_filter('theme_root_uri', array($this, 'fix_theme_root_uri'), 10, 3);
 			add_filter('includes_url', array($this, 'fix_uri'), 10, 1);
 			add_filter('wp_calculate_image_srcset', array($this, 'wp_calculate_image_srcset'), 10, 1);
+			add_filter('get_user_option_use_ssl', array($this, 'get_user_option_use_ssl') );
 		}
 		public function fix_uri($uri) {
 			return preg_replace('/^https?\:/i', '//', $uri); // replace "http://" or "https://" by "//"
@@ -39,5 +40,13 @@ if(defined('rsssl_plugin')) {
 			$sources['url'] = $this->fix_uri($sources['url']);
 			return $sources;
 		}
+		public function get_user_option_use_ssl($ssl) {
+			if( isset($_SERVER['HTTPS']) && 'on' == $_SERVER['HTTPS'] ) { //force ssl when enabled 
+				return true;
+			}
+			return $ssl;
+		}
+		
 	}
+	new RSSSLF();
 }
